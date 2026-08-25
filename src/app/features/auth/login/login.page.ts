@@ -165,7 +165,8 @@ export class LoginPage {
       next: (response) => {
         this.loading = false;
         this.toastService.showSuccess('Welcome back!');
-        const role = response.user?.role?.name || 'client';
+        const userRole = response.user?.role;
+        const role = (typeof userRole === 'string' ? userRole : userRole?.name) || 'client';
         const redirectUrl = this.authService.getRedirectUrlForRole(role);
         this.router.navigateByUrl(redirectUrl, { replaceUrl: true });
       },

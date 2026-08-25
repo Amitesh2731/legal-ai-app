@@ -53,8 +53,23 @@ export const routes: Routes = [
       },
       {
         path: 'cases',
-        loadComponent: () =>
-          import('./features/client/cases/case-list/case-list.page').then(m => m.CaseListPage)
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/client/cases/case-list/case-list.page').then(m => m.ClientCaseListPage)
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import('./features/client/cases/case-create/case-create.page').then(m => m.ClientCaseCreatePage)
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/client/cases/case-detail/case-detail.page').then(m => m.ClientCaseDetailPage)
+          }
+        ]
       },
       {
         path: 'payments',
@@ -94,8 +109,18 @@ export const routes: Routes = [
       },
       {
         path: 'cases',
-        loadComponent: () =>
-          import('./features/advocate/cases/case-list/case-list.page').then(m => m.AdvocateCaseListPage)
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/advocate/cases/case-list/case-list.page').then(m => m.AdvocateCaseListPage)
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/advocate/cases/case-detail/case-detail.page').then(m => m.AdvocateCaseDetailPage)
+          }
+        ]
       },
       {
         path: 'opinions',

@@ -38,7 +38,8 @@ export class TokenService {
 
   getUserRole(): string | null {
     const user = this.getUser();
-    return user?.role?.name || null;
+    if (!user || !user.role) return null;
+    return typeof user.role === 'string' ? user.role : (user.role as any).name || null;
   }
 
   isLoggedIn(): boolean {

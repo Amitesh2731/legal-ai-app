@@ -56,20 +56,26 @@ export class AuthService {
   }
 
   get userRole(): string | null {
-    return this.currentUser?.role?.name || this.tokenService.getUserRole();
+    const role = this.currentUser?.role;
+    return (typeof role === 'string' ? role : role?.name) || this.tokenService.getUserRole();
   }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    const formData = new URLSearchParams();
-    formData.set('username', credentials.email);
-    formData.set('password', credentials.password);
-
-    return this.api.post<AuthResponse>('/auth/login', formData.toString()).pipe(
-      tap(response => {
+    return this.api.post<any>('/auth/login', credentials).pipe(
+      switchMap(response => {
         this.tokenService.setTokens(response.access_token, response.refresh_token);
-        this.tokenService.setUser(response.user);
-        this.currentUserSubject.next(response.user);
-        this.isAuthenticatedSubject.next(true);
+        return this.loadCurrentUser().pipe(
+          tap(user => {
+            this.currentUserSubject.next(user);
+            this.isAuthenticatedSubject.next(true);
+          }),
+          switchMap(user => of({
+            access_token: response.access_token,
+            refresh_token: response.refresh_token,
+            token_type: response.token_type,
+            user: user
+          }))
+        );
       })
     );
   }

@@ -67,11 +67,9 @@ import { homeOutline, briefcaseOutline, documentTextOutline, personOutline, noti
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="main-background">
-          <div class="desktop-container">
-            <ion-router-outlet></ion-router-outlet>
-          </div>
-        </ion-content>
+        
+        <!-- router-outlet provides the page which has its own ion-content -->
+        <ion-router-outlet></ion-router-outlet>
       </div>
     </ion-split-pane>
   `,
@@ -129,15 +127,6 @@ import { homeOutline, briefcaseOutline, documentTextOutline, personOutline, noti
       ion-toolbar {
         --background: #f0f4f8;
       }
-    }
-    .main-background {
-      --background: #f0f4f8;
-    }
-    .desktop-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 16px;
-      height: 100%;
     }
   `]
 })

@@ -17,12 +17,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: H
   const shouldSkip = skipUrls.some(url => req.url.includes(url));
 
   if (shouldSkip) {
-    if (req.url.includes('/auth/login')) {
-      const cloned = req.clone({
-        setHeaders: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      });
-      return next(cloned);
-    }
     return next(req);
   }
 
