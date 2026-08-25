@@ -164,7 +164,7 @@ export class LoginPage {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: (response) => {
         this.loading = false;
-        this.toastService.showSuccess('Welcome back!');
+        this.toastService.showSuccess('Welcome back!', 'You have successfully signed in.');
         const userRole = response.user?.role;
         const role = (typeof userRole === 'string' ? userRole : userRole?.name) || 'client';
         const redirectUrl = this.authService.getRedirectUrlForRole(role);

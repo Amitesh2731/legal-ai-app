@@ -8,53 +8,53 @@ export class ToastService {
 
   constructor(private toastController: ToastController) {}
 
-  async showSuccess(message: string, duration: number = 3000): Promise<void> {
+  async showSuccess(titleOrMessage: string, message?: string, duration: number = 3000): Promise<void> {
     const toast = await this.toastController.create({
-      message,
+      header: message ? titleOrMessage : undefined,
+      message: message ? message : titleOrMessage,
       duration,
       position: 'top',
-      color: 'success',
-      icon: 'checkmark-circle-outline',
-      cssClass: 'custom-toast toast-success',
+      icon: 'checkmark-circle',
+      cssClass: 'modern-toast toast-success',
       buttons: [{ icon: 'close', role: 'cancel' }]
     });
     await toast.present();
   }
 
-  async showError(message: string, duration: number = 4000): Promise<void> {
+  async showError(titleOrMessage: string, message?: string, duration: number = 4000): Promise<void> {
     const toast = await this.toastController.create({
-      message,
+      header: message ? titleOrMessage : undefined,
+      message: message ? message : titleOrMessage,
       duration,
       position: 'top',
-      color: 'danger',
-      icon: 'alert-circle-outline',
-      cssClass: 'custom-toast toast-error',
+      icon: 'alert-circle',
+      cssClass: 'modern-toast toast-error',
       buttons: [{ icon: 'close', role: 'cancel' }]
     });
     await toast.present();
   }
 
-  async showWarning(message: string, duration: number = 3500): Promise<void> {
+  async showWarning(titleOrMessage: string, message?: string, duration: number = 3500): Promise<void> {
     const toast = await this.toastController.create({
-      message,
+      header: message ? titleOrMessage : undefined,
+      message: message ? message : titleOrMessage,
       duration,
       position: 'top',
-      color: 'warning',
-      icon: 'warning-outline',
-      cssClass: 'custom-toast toast-warning',
+      icon: 'warning',
+      cssClass: 'modern-toast toast-warning',
       buttons: [{ icon: 'close', role: 'cancel' }]
     });
     await toast.present();
   }
 
-  async showInfo(message: string, duration: number = 3000): Promise<void> {
+  async showInfo(titleOrMessage: string, message?: string, duration: number = 3000): Promise<void> {
     const toast = await this.toastController.create({
-      message,
+      header: message ? titleOrMessage : undefined,
+      message: message ? message : titleOrMessage,
       duration,
       position: 'top',
-      color: 'primary',
-      icon: 'information-circle-outline',
-      cssClass: 'custom-toast toast-info',
+      icon: 'information-circle',
+      cssClass: 'modern-toast toast-info',
       buttons: [{ icon: 'close', role: 'cancel' }]
     });
     await toast.present();

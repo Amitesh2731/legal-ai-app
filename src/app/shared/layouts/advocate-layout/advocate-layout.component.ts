@@ -60,14 +60,6 @@ import { homeOutline, briefcaseOutline, documentTextOutline, personOutline, noti
 
       <!-- Main Content Area -->
       <div class="ion-page" id="main-content">
-        <ion-header class="ion-no-border desktop-header">
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-menu-button color="primary"></ion-menu-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        
         <!-- router-outlet provides the page which has its own ion-content -->
         <ion-router-outlet></ion-router-outlet>
       </div>

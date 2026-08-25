@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonIcon, IonSkeletonText, IonRefresher, IonRefresherContent } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonSkeletonText, IonRefresher, IonRefresherContent, IonMenuButton, IonButtons } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
   briefcaseOutline, documentTextOutline, chatbubblesOutline, 
@@ -21,7 +21,7 @@ import { ErrorStateComponent } from '../../../shared/components/error-state/erro
   standalone: true,
   imports: [
     CommonModule, IonContent, IonIcon, IonSkeletonText, IonRefresher, IonRefresherContent, 
-    RouterLink, EmptyStateComponent, ErrorStateComponent
+    RouterLink, EmptyStateComponent, ErrorStateComponent, IonMenuButton, IonButtons
   ],
   template: `
     <ion-content [fullscreen]="true" class="main-background">
@@ -35,6 +35,9 @@ import { ErrorStateComponent } from '../../../shared/components/error-state/erro
         <header class="dashboard-header animate-fade-in-up">
           <div class="header-top">
             <div class="user-greeting">
+              <ion-buttons class="ion-hide-lg-up">
+                <ion-menu-button color="primary"></ion-menu-button>
+              </ion-buttons>
               <div class="avatar">
                 @if (user?.profile_photo) {
                   <img [src]="user?.profile_photo" alt="Profile Photo" />
