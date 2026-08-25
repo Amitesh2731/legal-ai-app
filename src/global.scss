@@ -1,0 +1,391 @@
+/* ──────────────────────────────────────────────────────────────
+   Legal AI — Global Styles
+   Industry-standard mobile design system
+   ────────────────────────────────────────────────────────────── */
+
+/* ─── Google Font: Inter ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ─── Ion Content Reset ──────────────────────────────────────── */
+ion-content {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+/* ─── Custom Toast Styles ────────────────────────────────────── */
+.custom-toast {
+  --border-radius: 12px;
+  --box-shadow: var(--legal-shadow-lg);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ─── Premium SaaS Auth Styles ────────────────────────────────── */
+.auth-page {
+  --background: #fafafa; /* Minimal clean background */
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 48px 20px;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #111827; /* Solid dark, standard enterprise look */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  
+  ion-icon {
+    font-size: 24px;
+    color: #ffffff;
+  }
+}
+
+.auth-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+
+.auth-subtitle {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Form Card ──────────────────────────────────────────────── */
+.form-card {
+  width: 100%;
+  max-width: 400px; /* Slimmer, modern form width */
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); /* Clean, crisp shadow */
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+.form-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 24px;
+  text-align: center;
+  display: none; /* Hide if not needed, as we have page title */
+}
+
+/* ─── Custom Input Styles ────────────────────────────────────── */
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px; /* Standard rounded */
+  transition: all 0.15s ease-in-out;
+  overflow: hidden;
+  height: 44px; /* Fixed height for wrapper */
+
+  &:hover {
+    border-color: #9ca3af;
+  }
+
+  &:focus-within {
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  &.has-error {
+    border-color: #ef4444;
+    &:focus-within {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  ion-input, ion-textarea {
+    flex: 1;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --color: #111827;
+    --placeholder-color: #9ca3af;
+    font-size: 14px;
+    font-weight: 400;
+    height: 100%;
+    margin: 0;
+  }
+
+  .toggle-password {
+    padding: 0 12px;
+    color: #9ca3af;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+    
+    ion-icon {
+      font-size: 18px;
+    }
+    
+    &:hover {
+      color: #4b5563;
+    }
+  }
+}
+
+.input-error {
+  display: block;
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* ─── Buttons ─────────────────────────────────────────── */
+.btn-primary {
+  --background: #111827;
+  --background-hover: #1f2937;
+  --background-activated: #374151;
+  --border-radius: 8px;
+  --box-shadow: none;
+  --color: #ffffff;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  margin: 8px 0 0;
+  height: 42px;
+
+  &::part(native) {
+    transition: background 0.15s ease;
+  }
+
+  &.button-disabled {
+    opacity: 0.7;
+  }
+}
+
+.btn-secondary {
+  --background: transparent;
+  --color: #111827;
+  --border-radius: 8px;
+  --box-shadow: none;
+  --border-color: #d1d5db;
+  --border-style: solid;
+  --border-width: 1px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: none;
+  margin: 8px 0;
+  height: 42px;
+}
+
+/* ─── Links ────────────────────────────────────────────── */
+.auth-link {
+  text-align: right;
+  margin-top: -12px;
+  margin-bottom: 16px;
+
+  a, button {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+  }
+}
+
+.auth-footer {
+  text-align: center;
+
+  p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+
+    a, button {
+      color: #111827;
+      font-weight: 500;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 4px;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* ─── Divider ────────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(var(--ion-color-medium-rgb), 0.2);
+  }
+
+  span {
+    font-size: 12px;
+    color: var(--ion-color-medium);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+}
+
+/* ─── Status Badges ──────────────────────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.status-new { background: rgba(var(--ion-color-primary-rgb), 0.1); color: var(--ion-color-primary); }
+  &.status-pending { background: rgba(var(--ion-color-warning-rgb), 0.1); color: var(--ion-color-warning); }
+  &.status-active { background: rgba(var(--ion-color-tertiary-rgb), 0.1); color: var(--ion-color-tertiary); }
+  &.status-completed { background: rgba(var(--ion-color-success-rgb), 0.1); color: var(--ion-color-success); }
+  &.status-failed { background: rgba(var(--ion-color-danger-rgb), 0.1); color: var(--ion-color-danger); }
+}
+
+/* ─── Page Header ────────────────────────────────────────────── */
+.page-header {
+  padding: 24px 20px 16px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--ion-text-color);
+    margin: 0 0 4px;
+    letter-spacing: -0.5px;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+/* ─── Card Styles ────────────────────────────────────────────── */
+.info-card {
+  background: var(--ion-card-background);
+  border-radius: var(--legal-radius-md);
+  padding: 16px;
+  box-shadow: var(--legal-shadow-sm);
+  margin-bottom: 12px;
+}
+
+/* ─── Skeleton Loader ────────────────────────────────────────── */
+ion-skeleton-text {
+  --border-radius: 6px;
+}
+
+/* ─── Pull to Refresh ────────────────────────────────────────── */
+ion-refresher {
+  ion-refresher-content {
+    --color: var(--ion-color-primary);
+  }
+}
+
+/* ─── Animations ─────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+/* Stagger animations for lists */
+@for $i from 1 through 10 {
+  .animate-delay-#{$i} {
+    animation-delay: #{$i * 0.05}s;
+    opacity: 0;
+  }
+}

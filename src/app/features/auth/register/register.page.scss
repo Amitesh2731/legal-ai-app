@@ -1,0 +1,119 @@
+.role-selector {
+  display: flex;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 24px;
+  
+  button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    ion-icon {
+      font-size: 16px;
+    }
+    
+    &.active {
+      background: #ffffff;
+      color: #111827;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  }
+}
+
+.advocate-fields {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  
+  .input-group {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.password-strength {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  
+  .strength-bars {
+    display: flex;
+    flex: 1;
+    gap: 4px;
+    height: 4px;
+    
+    .strength-bar {
+      flex: 1;
+      height: 100%;
+      background: #e5e7eb;
+      border-radius: 2px;
+      transition: background 0.3s ease;
+      
+      &.active.weak { background: #f59e0b; }
+      &.active.strong { background: #10b981; }
+    }
+  }
+  
+  .strength-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+    min-width: 42px;
+    text-align: right;
+  }
+}
+
+.password-hints {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  
+  small {
+    font-size: 11px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    
+    &::before {
+      content: '•';
+      margin-right: 6px;
+      font-size: 14px;
+    }
+    
+    &.valid {
+      color: #10b981;
+      &::before {
+        content: '✓';
+      }
+    }
+  }
+}

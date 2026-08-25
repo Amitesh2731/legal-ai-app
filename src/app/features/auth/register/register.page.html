@@ -1,0 +1,133 @@
+<ion-content class="auth-page" [fullscreen]="true" [scrollY]="true">
+  <div class="auth-container">
+    <div class="auth-header animate-fade-in-up">
+      <div class="auth-logo"><ion-icon name="scale-outline"></ion-icon></div>
+      <h1 class="auth-title">Create your account</h1>
+      <p class="auth-subtitle">Get started by creating your account.</p>
+    </div>
+
+    <div class="form-card animate-fade-in-up animate-delay-2">
+      <!-- Role Selection -->
+      <div class="role-selector">
+        <button type="button" [class.active]="form.role === 'client'" (click)="setRole('client')">
+          <ion-icon name="person-outline"></ion-icon> Client
+        </button>
+        <button type="button" [class.active]="form.role === 'advocate'" (click)="setRole('advocate')">
+          <ion-icon name="briefcase-outline"></ion-icon> Advocate
+        </button>
+      </div>
+      
+      <!-- Name Row -->
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label">First name</label>
+          <div class="input-wrapper" [class.has-error]="errors['first_name']">
+            <ion-input type="text" placeholder="First name" [(ngModel)]="form.first_name" (ionInput)="clearError('first_name')"></ion-input>
+          </div>
+          @if (errors['first_name']) { <span class="input-error">{{ errors['first_name'] }}</span> }
+        </div>
+        <div class="input-group">
+          <label class="input-label">Last name</label>
+          <div class="input-wrapper" [class.has-error]="errors['last_name']">
+            <ion-input type="text" placeholder="Last name" [(ngModel)]="form.last_name" (ionInput)="clearError('last_name')"></ion-input>
+          </div>
+          @if (errors['last_name']) { <span class="input-error">{{ errors['last_name'] }}</span> }
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group">
+        <label class="input-label">Email address</label>
+        <div class="input-wrapper" [class.has-error]="errors['email']">
+          <ion-input type="email" placeholder="Enter your email address" [(ngModel)]="form.email" (ionInput)="clearError('email')"></ion-input>
+        </div>
+        @if (errors['email']) { <span class="input-error">{{ errors['email'] }}</span> }
+      </div>
+
+      <!-- Advocate Specific Fields -->
+      @if (form.role === 'advocate') {
+        <div class="advocate-fields animate-fade-in-up">
+          <div class="input-group">
+            <label class="input-label">Bar Council Number</label>
+            <div class="input-wrapper" [class.has-error]="errors['bar_council_number']">
+              <ion-input type="text" placeholder="e.g. BAR/1234/2020" [(ngModel)]="form.bar_council_number" (ionInput)="clearError('bar_council_number')"></ion-input>
+            </div>
+            @if (errors['bar_council_number']) { <span class="input-error">{{ errors['bar_council_number'] }}</span> }
+          </div>
+          
+          <div class="form-row">
+            <div class="input-group">
+              <label class="input-label">Specialization</label>
+              <div class="input-wrapper" [class.has-error]="errors['specialization']">
+                <ion-input type="text" placeholder="e.g. Corporate Law" [(ngModel)]="form.specialization" (ionInput)="clearError('specialization')"></ion-input>
+              </div>
+              @if (errors['specialization']) { <span class="input-error">{{ errors['specialization'] }}</span> }
+            </div>
+            <div class="input-group">
+              <label class="input-label">Years of Experience</label>
+              <div class="input-wrapper" [class.has-error]="errors['experience_years']">
+                <ion-input type="number" placeholder="0" [(ngModel)]="form.experience_years" (ionInput)="clearError('experience_years')"></ion-input>
+              </div>
+              @if (errors['experience_years']) { <span class="input-error">{{ errors['experience_years'] }}</span> }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Password -->
+      <div class="input-group">
+        <label class="input-label">Password</label>
+        <div class="input-wrapper" [class.has-error]="errors['password']">
+          <ion-input [type]="showPassword ? 'text' : 'password'" placeholder="Create a password" [(ngModel)]="form.password" (ionInput)="clearError('password')"></ion-input>
+          <button class="toggle-password" (click)="showPassword = !showPassword" type="button" aria-label="Toggle password visibility">
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </button>
+        </div>
+        @if (errors['password']) { <span class="input-error">{{ errors['password'] }}</span> }
+        
+        <!-- Password Strength -->
+        @if (form.password) {
+          <div class="password-strength">
+            <div class="strength-bars">
+              @for (bar of [1,2,3,4]; track bar) {
+                <div class="strength-bar" [class.active]="getPasswordStrength() >= bar" [class.weak]="getPasswordStrength() < 3 && getPasswordStrength() >= bar" [class.strong]="getPasswordStrength() >= 3"></div>
+              }
+            </div>
+            <span class="strength-text">{{ getPasswordStrengthText() }}</span>
+          </div>
+          <div class="password-hints">
+            <small [class.valid]="form.password.length >= 8">At least 8 characters</small>
+            <small [class.valid]="hasUppercase(form.password)">One uppercase letter</small>
+            <small [class.valid]="hasNumber(form.password)">One number</small>
+          </div>
+        }
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="input-group" style="margin-bottom: 24px;">
+        <label class="input-label">Confirm password</label>
+        <div class="input-wrapper" [class.has-error]="errors['confirmPassword']">
+          <ion-input [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Confirm your password" [(ngModel)]="confirmPassword" (ionInput)="clearError('confirmPassword')"></ion-input>
+          <button class="toggle-password" (click)="showConfirmPassword = !showConfirmPassword" type="button" aria-label="Toggle confirm password visibility">
+            <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </button>
+        </div>
+        @if (errors['confirmPassword']) { <span class="input-error">{{ errors['confirmPassword'] }}</span> }
+      </div>
+
+      <!-- Create Account Button -->
+      <ion-button expand="block" class="btn-primary" (click)="onRegister()" [disabled]="loading">
+        @if (loading) { 
+          <ion-spinner name="crescent" style="margin-right: 8px; width: 16px; height: 16px;"></ion-spinner> Creating account... 
+        } @else { 
+          Create account
+        }
+      </ion-button>
+      
+    </div>
+
+    <div class="auth-footer animate-fade-in-up animate-delay-4">
+      <p>Already have an account? <a routerLink="/auth/login">Sign in</a></p>
+    </div>
+  </div>
+</ion-content>
