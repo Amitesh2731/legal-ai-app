@@ -1,30 +1,41 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { TokenService } from '../services/token.service';
+import { AuthService, AuthStatus } from '../services/auth.service';
+import { filter, map, take } from 'rxjs/operators';
 
 export const AuthGuard: CanActivateFn = (route, state) => {
-  const tokenService = inject(TokenService);
+  const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (tokenService.isLoggedIn()) {
-    return true;
-  }
-
-  router.navigateByUrl('/auth/login', { replaceUrl: true });
-  return false;
+  return authService.authStatus$.pipe(
+    filter(status => status !== AuthStatus.INITIALIZING),
+    take(1),
+    map(status => {
+      if (status === AuthStatus.AUTHENTICATED) {
+        return true;
+      }
+      router.navigateByUrl('/auth/login', { replaceUrl: true });
+      return false;
+    })
+  );
 };
 
 export const GuestGuard: CanActivateFn = (route, state) => {
-  const tokenService = inject(TokenService);
+  const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (!tokenService.isLoggedIn()) {
-    return true;
-  }
+  return authService.authStatus$.pipe(
+    filter(status => status !== AuthStatus.INITIALIZING),
+    take(1),
+    map(status => {
+      if (status === AuthStatus.UNAUTHENTICATED) {
+        return true;
+      }
 
-  // If already logged in, redirect to dashboard
-  const role = tokenService.getUserRole();
-  const redirectUrl = role === 'advocate' ? '/advocate/dashboard' : '/client/dashboard';
-  router.navigateByUrl(redirectUrl, { replaceUrl: true });
-  return false;
+      const role = authService.userRole;
+      const redirectUrl = authService.getRedirectUrlForRole(role || '');
+      router.navigateByUrl(redirectUrl, { replaceUrl: true });
+      return false;
+    })
+  );
 };

@@ -52,6 +52,12 @@ export class ApiService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
+  getBlob(endpoint: string): Observable<Blob> {
+    return this.http
+      .get(`${this.baseUrl}${endpoint}`, { responseType: 'blob' })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
   post<T>(endpoint: string, body: any = {}): Observable<T> {
     return this.http
       .post<T>(`${this.baseUrl}${endpoint}`, body)

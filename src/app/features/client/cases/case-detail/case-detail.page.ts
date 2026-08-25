@@ -19,6 +19,8 @@ import { CaseDetailAggregatedResponse, CaseStatus } from '../../../../core/model
 import { CaseStatusComponent } from '../../../../shared/components/case-status/case-status.component';
 import { CaseHistoryComponent } from '../../../../shared/components/case-history/case-history.component';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
+import { DocumentListComponent } from '../../../../shared/components/document-list/document-list.component';
+import { DocumentResponse } from '../../../../core/models/document.model';
 
 @Component({
   selector: 'app-client-case-detail',
@@ -27,7 +29,7 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state/e
     CommonModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons,
     IonSegment, IonSegmentButton, IonLabel, IonSpinner, IonIcon, IonCard,
     IonCardContent, IonCardHeader, IonCardTitle, IonList, IonItem, IonRefresher, IonRefresherContent,
-    CaseStatusComponent, CaseHistoryComponent, EmptyStateComponent
+    CaseStatusComponent, CaseHistoryComponent, EmptyStateComponent, DocumentListComponent
   ],
   template: `
     <ion-header class="ion-no-border">
@@ -179,15 +181,14 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state/e
             </div>
           }
 
-          <!-- DOCUMENTS TAB (Placeholder for Sprint 4) -->
+          <!-- DOCUMENTS TAB -->
           @if (activeTab === 'documents') {
             <div class="tab-content animate-fade-in">
-              <app-empty-state 
-                icon="document-text-outline" 
-                title="Documents" 
-                description="Document management will be available in the next update." 
-                actionLabel="">
-              </app-empty-state>
+              <app-document-list 
+                [caseId]="caseId" 
+                [canUpload]="true"
+                (onDocumentClick)="onDocumentClick($event)">
+              </app-document-list>
             </div>
           }
 
@@ -398,5 +399,9 @@ export class ClientCaseDetailPage implements OnInit {
     if (!this.caseDetails) return false;
     const c = this.caseDetails.case;
     return !!(c.incident_date || c.location || c.opposing_party_name || c.previous_legal_action);
+  }
+
+  onDocumentClick(doc: DocumentResponse) {
+    this.router.navigate(['/client/cases', this.caseId, 'documents', doc.id]);
   }
 }

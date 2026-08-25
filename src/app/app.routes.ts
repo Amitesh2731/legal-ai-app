@@ -68,6 +68,11 @@ export const routes: Routes = [
             path: ':id',
             loadComponent: () =>
               import('./features/client/cases/case-detail/case-detail.page').then(m => m.ClientCaseDetailPage)
+          },
+          {
+            path: ':id/documents/:documentId',
+            loadComponent: () =>
+              import('./shared/pages/document-detail/document-detail.page').then(m => m.DocumentDetailPage)
           }
         ]
       },
@@ -119,6 +124,11 @@ export const routes: Routes = [
             path: ':id',
             loadComponent: () =>
               import('./features/advocate/cases/case-detail/case-detail.page').then(m => m.AdvocateCaseDetailPage)
+          },
+          {
+            path: ':id/documents/:documentId',
+            loadComponent: () =>
+              import('./shared/pages/document-detail/document-detail.page').then(m => m.DocumentDetailPage)
           }
         ]
       },

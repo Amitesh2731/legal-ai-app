@@ -20,6 +20,8 @@ import { CaseStatusComponent } from '../../../../shared/components/case-status/c
 import { CaseHistoryComponent } from '../../../../shared/components/case-history/case-history.component';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { ToastService } from '../../../../core/services/toast.service';
+import { DocumentListComponent } from '../../../../shared/components/document-list/document-list.component';
+import { DocumentResponse } from '../../../../core/models/document.model';
 
 @Component({
   selector: 'app-advocate-case-detail',
@@ -29,7 +31,7 @@ import { ToastService } from '../../../../core/services/toast.service';
     IonSegment, IonSegmentButton, IonLabel, IonSpinner, IonIcon, IonCard,
     IonCardContent, IonCardHeader, IonCardTitle, IonList, IonItem, IonRefresher, IonRefresherContent,
     IonButton, IonModal, IonSelect, IonSelectOption,
-    CaseStatusComponent, CaseHistoryComponent, EmptyStateComponent
+    CaseStatusComponent, CaseHistoryComponent, EmptyStateComponent, DocumentListComponent
   ],
   template: `
     <ion-header class="ion-no-border">
@@ -203,15 +205,14 @@ import { ToastService } from '../../../../core/services/toast.service';
             </div>
           }
 
-          <!-- DOCUMENTS TAB (Placeholder for Sprint 4) -->
+          <!-- DOCUMENTS TAB -->
           @if (activeTab === 'documents') {
             <div class="tab-content animate-fade-in">
-              <app-empty-state 
-                icon="document-text-outline" 
-                title="Documents" 
-                description="Document management will be available in the next update." 
-                actionLabel="">
-              </app-empty-state>
+              <app-document-list 
+                [caseId]="caseId" 
+                [canUpload]="true"
+                (onDocumentClick)="onDocumentClick($event)">
+              </app-document-list>
             </div>
           }
 
@@ -514,5 +515,9 @@ export class AdvocateCaseDetailPage implements OnInit {
   
   formatEnum(val: string): string {
     return val.split('_').map(w => w.charAt(0) + w.slice(1).toLowerCase()).join(' ');
+  }
+
+  onDocumentClick(doc: DocumentResponse) {
+    this.router.navigate(['/advocate/cases', this.caseId, 'documents', doc.id]);
   }
 }

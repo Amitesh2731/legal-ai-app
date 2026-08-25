@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap, switchMap, of, catchError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from './api.service';
 import { TokenService } from './token.service';
 import { User, LoginRequest, RegisterRequest, AuthResponse } from '../models/user.model';
 import { Router } from '@angular/router';
+
+export enum AuthStatus {
+  INITIALIZING = 'INITIALIZING',
+  AUTHENTICATED = 'AUTHENTICATED',
+  UNAUTHENTICATED = 'UNAUTHENTICATED'
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,38 +20,71 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-
-  private loadingSubject = new BehaviorSubject<boolean>(true);
-  public loading$ = this.loadingSubject.asObservable();
+  private authStatusSubject = new BehaviorSubject<AuthStatus>(AuthStatus.INITIALIZING);
+  public authStatus$ = this.authStatusSubject.asObservable();
 
   constructor(
     private api: ApiService,
     private tokenService: TokenService,
     private router: Router
   ) {
-    this.initAuth();
+    // Auth initialization is now triggered explicitly by APP_INITIALIZER
   }
 
-  private initAuth(): void {
-    const token = this.tokenService.getAccessToken();
-    if (token && !this.tokenService.isTokenExpired(token)) {
+  public initAuth(): Promise<void> {
+    return new Promise((resolve) => {
+      this.authStatusSubject.next(AuthStatus.INITIALIZING);
+
+      const token = this.tokenService.getAccessToken();
+      const refreshToken = this.tokenService.getRefreshToken();
+
+      if (!token) {
+        this.setUnauthenticated();
+        resolve();
+        return;
+      }
+
+      if (this.tokenService.isTokenExpired(token) && !refreshToken) {
+        this.clearAuth();
+        this.setUnauthenticated();
+        resolve();
+        return;
+      }
+
       this.loadCurrentUser().subscribe({
-        next: () => this.loadingSubject.next(false),
-        error: () => {
-          this.clearAuth();
-          this.loadingSubject.next(false);
+        next: (user) => {
+          this.setAuthenticated(user);
+          resolve();
+        },
+        error: (err: HttpErrorResponse) => {
+          // If a 401 is returned here, it means the token was invalid AND refresh failed (interceptor handles refresh)
+          if (err.status === 401) {
+            this.clearAuth();
+            this.setUnauthenticated();
+          } else {
+            // Temporary error (500, network error, timeout, CORS). Preserve session!
+            const savedUser = this.tokenService.getUser();
+            if (savedUser) {
+              this.setAuthenticated(savedUser);
+            } else {
+              // If we have no cached user to fallback on, we must consider them unauthenticated for now
+              this.setUnauthenticated();
+            }
+          }
+          resolve();
         }
       });
-    } else {
-      const savedUser = this.tokenService.getUser();
-      if (savedUser && token) {
-        this.currentUserSubject.next(savedUser);
-        this.isAuthenticatedSubject.next(true);
-      }
-      this.loadingSubject.next(false);
-    }
+    });
+  }
+
+  private setAuthenticated(user: User): void {
+    this.currentUserSubject.next(user);
+    this.authStatusSubject.next(AuthStatus.AUTHENTICATED);
+  }
+
+  private setUnauthenticated(): void {
+    this.currentUserSubject.next(null);
+    this.authStatusSubject.next(AuthStatus.UNAUTHENTICATED);
   }
 
   get currentUser(): User | null {
@@ -52,7 +92,11 @@ export class AuthService {
   }
 
   get isAuthenticated(): boolean {
-    return this.isAuthenticatedSubject.value;
+    return this.authStatusSubject.value === AuthStatus.AUTHENTICATED;
+  }
+
+  get isInitializing(): boolean {
+    return this.authStatusSubject.value === AuthStatus.INITIALIZING;
   }
 
   get userRole(): string | null {
@@ -66,8 +110,8 @@ export class AuthService {
         this.tokenService.setTokens(response.access_token, response.refresh_token);
         return this.loadCurrentUser().pipe(
           tap(user => {
-            this.currentUserSubject.next(user);
-            this.isAuthenticatedSubject.next(true);
+            this.tokenService.setUser(user);
+            this.setAuthenticated(user);
           }),
           switchMap(user => of({
             access_token: response.access_token,
@@ -100,8 +144,6 @@ export class AuthService {
     return this.api.get<User>('/auth/me').pipe(
       tap(user => {
         this.tokenService.setUser(user);
-        this.currentUserSubject.next(user);
-        this.isAuthenticatedSubject.next(true);
       })
     );
   }
@@ -118,23 +160,18 @@ export class AuthService {
         if (response.refresh_token) {
           this.tokenService.setTokens(response.access_token, response.refresh_token);
         }
-      }),
-      catchError(err => {
-        this.logout();
-        throw err;
       })
     );
   }
 
   logout(): void {
     this.clearAuth();
+    this.setUnauthenticated();
     this.router.navigateByUrl('/auth/login', { replaceUrl: true });
   }
 
   private clearAuth(): void {
     this.tokenService.clearAll();
-    this.currentUserSubject.next(null);
-    this.isAuthenticatedSubject.next(false);
   }
 
   getRedirectUrlForRole(role: string): string {
